@@ -45,9 +45,9 @@ def crawl(query, save_as, begin, end, sort=0, field=1, delay=0.5, timeout=30, pa
 
         if bsobj is None:
             continue
-
         print('extracting naver news urls from bsobj')
         naver_news_urls = make_naver_news_urls(bsobj)
+        print(naver_news_urls)
 
         for url in naver_news_urls:
             print('\topening:', url)
@@ -110,8 +110,7 @@ def make_bsobj(url, delay=0.5, timeout=30, trial=10):
 
 
 def make_naver_news_urls(bsobj):
-    return [link['href'] for link in bsobj.find_all('a', href=True)
-            if 'https://news.naver.com/main/read' in link['href']]
+    return [link['href'] for link in bsobj.find_all('a', 'news_tit')]
 
 
 def get_attributes(bsobj):
@@ -163,7 +162,7 @@ def get_arguments():
     parser.add_argument('--query', type=str, required=True, help='query to search on NAVER')
     parser.add_argument('--begin', type=str, required=True, help='crawling begin point (%%Y.%%m.%%d format)')
     parser.add_argument('--end', type=str, required=True, help='crawling end point (%%Y.%%m.%%d format)')
-    parser.add_argument('--save_as', type=str, default='test.xlsx', help='excel save path')
+    parser.add_argument('--save_as', type=str, default='test2.xlsx', help='excel save path')
     parser.add_argument('--sort', type=int, default=0, help='search result sorting: 0(relevant), 1(newest), 2(oldest)')
     parser.add_argument('--field', type=int, default=1, help='search field: 0(all), 1(title)')
     return parser.parse_args()
@@ -185,3 +184,4 @@ if __name__ == '__main__':
           end=end,
           sort=sort,
           field=field)
+
